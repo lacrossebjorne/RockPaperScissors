@@ -2,13 +2,14 @@ package example.com.rockpaperscissors;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -23,20 +24,23 @@ public class GameFragment extends Fragment {
         final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.AppTheme);
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
-        View view = localInflater.inflate(R.layout.game_layout, parentViewGroup, false);
-        return view;
+        return localInflater.inflate(R.layout.game_fragment, parentViewGroup, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        TextView title = (TextView) getActivity().findViewById(R.id.titleView);
+        LinearLayout buttons = (LinearLayout) view.findViewById(R.id.buttons);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) buttons.getLayoutParams();
+        params.addRule(RelativeLayout.ALIGN_START, R.id.titleView);
+        params.addRule(RelativeLayout.ALIGN_END, R.id.titleView);
+        buttons.setLayoutParams(params);
+
         Button rock = (Button) view.findViewById(R.id.rock);
         Button paper = (Button) view.findViewById(R.id.paper);
         Button scissors = (Button) view.findViewById(R.id.scissors);
-        int buttonWidth = scissors.getWidth();
-        rock.setWidth(buttonWidth);
-        paper.setWidth(buttonWidth);
 
         humanDraw = (TextView) view.findViewById(R.id.humandraw);
         cpuDraw = (TextView) view.findViewById(R.id.cpudraw);

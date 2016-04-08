@@ -1,33 +1,37 @@
 package example.com.rockpaperscissors;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+    static final String STATE_PLAY_BUTTON = "play_button";
     TextView title;
     Button playButton = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getInt(STATE_PLAY_BUTTON) == View.INVISIBLE)
+            playButton.setVisibility(View.INVISIBLE);
+        }
+
         setContentView(R.layout.activity_main);
 
-        title = (TextView) findViewById(R.id.title);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            title.setText(getText(R.string.title_portrait));
-        else
-            title.setText(getText(R.string.title_landscape));
-        final Animation fadeout = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+        title = (TextView) findViewById(R.id.titleView);
         playButton = (Button) findViewById(R.id.playButton);
 
         if (playButton != null) {
@@ -38,13 +42,17 @@ public class MainActivity extends Activity {
                     fadeout.setDuration(1500);
                     fadeout.setAnimationListener(new Animation.AnimationListener() {
                         @Override
-                        public void onAnimationStart(Animation animation) {}
-                        public void onAnimationRepeat(Animation a){}
-                        public void onAnimationEnd(Animation a){
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        public void onAnimationRepeat(Animation a) {
+                        }
+
+                        public void onAnimationEnd(Animation a) {
                             playButton.setVisibility(View.INVISIBLE);
                             getFragmentManager().beginTransaction()
-                                .add(R.id.fragment_holder, new GameFragment())
-                                .commit();
+                                    .add(R.id.fragment_holder, new GameFragment())
+                                    .commit();
                         }
                     });
                     playButton.startAnimation(fadeout);
@@ -54,13 +62,10 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            title.setText(getText(R.string.title_landscape));
-        else
-            title.setText(getText(R.string.title_portrait));
+    public void onSaveInstanceState(Bundle outState) {
+        // Save the play buttons state so it stays invisible on restart
+        outState.putInt(STATE_PLAY_BUTTON, playButton.getVisibility());
+        super.onSaveInstanceState(outState);
     }
 
     @Override

@@ -18,21 +18,21 @@ public class MainActivity extends Activity {
 
     static final String STATE_PLAY_BUTTON = "play_button";
     TextView title;
-    Button playButton = null;
+    Button playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+        playButton = (Button) findViewById(R.id.playButton);
+
         if (savedInstanceState != null) {
-            if (savedInstanceState.getInt(STATE_PLAY_BUTTON) == View.INVISIBLE)
-            playButton.setVisibility(View.INVISIBLE);
+            if (savedInstanceState.getInt(STATE_PLAY_BUTTON) == View.GONE)
+                playButton.setVisibility(View.GONE);
         }
 
-        setContentView(R.layout.activity_main);
-
         title = (TextView) findViewById(R.id.titleView);
-        playButton = (Button) findViewById(R.id.playButton);
 
         if (playButton != null) {
             playButton.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
                         }
 
                         public void onAnimationEnd(Animation a) {
-                            playButton.setVisibility(View.INVISIBLE);
+                            playButton.setVisibility(View.GONE);
                             getFragmentManager().beginTransaction()
                                     .add(R.id.fragment_holder, new GameFragment())
                                     .commit();

@@ -31,13 +31,6 @@ public class GameFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView title = (TextView) getActivity().findViewById(R.id.titleView);
-        LinearLayout buttons = (LinearLayout) view.findViewById(R.id.buttons);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) buttons.getLayoutParams();
-        params.addRule(RelativeLayout.ALIGN_START, R.id.titleView);
-        params.addRule(RelativeLayout.ALIGN_END, R.id.titleView);
-        buttons.setLayoutParams(params);
-
         Button rock = (Button) view.findViewById(R.id.rock);
         Button paper = (Button) view.findViewById(R.id.paper);
         Button scissors = (Button) view.findViewById(R.id.scissors);
